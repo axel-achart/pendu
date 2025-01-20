@@ -5,7 +5,9 @@ word_chain = []
 
 # Menu pendu
 def hanged_menu():
+    
     while True :
+
         print("=================")
         print("    Hangman      ")
         print("=================")
@@ -19,15 +21,21 @@ def hanged_menu():
                     case "1":
                     
                         print(game_list)
-                        entry = input("veuillez renseigner votre première lettre: ")
+                        entry = input("veuillez renseigner une lettre: ")
+                        
+                        print(count)
                         if entry in word_chain:
                                 letter_index=word_chain.index(entry)
                                 game_list[letter_index] = entry
                                 print(game_list)
+                                count = count -1
+                                if count ==0:
+                                     print("Vous avez gagné")
                         continue
                     case "2" : 
                         word = input("Veuillez renseigner le mot à insérer: ").strip().upper()
                         word_chain = list(word)
+                        count = len(word_chain)
                         print(word_chain)
                         game_list = ['_' for _ in word_chain]
                         continue

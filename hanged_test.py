@@ -21,7 +21,7 @@ def hanged_menu():
                     case "1":
                     
                         print(game_list)
-                        entry = input("veuillez renseigner une lettre: ")
+                        entry = input("veuillez renseigner une lettre: ").upper
                         
                         print(count)
                         if entry in word_chain:
@@ -31,7 +31,9 @@ def hanged_menu():
                                 count = count -1
                                 if count ==0:
                                      print("Vous avez gagné")
-                        continue
+                                     break
+                                else:
+                                    continue
                     case "2" : 
                         word = input("Veuillez renseigner le mot à insérer: ").strip().upper()
                         word_chain = list(word)

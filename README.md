@@ -1,6 +1,8 @@
 # Note
 </br>
-Chacun sa branche. </br>
+Faire la démo dès le début de la soutenance </br>
+Chacun sa branche, avec nom correct </br>
+Faire une diapo </br>
 Commits, commentaires et code en anglais</br>
 </br>
 

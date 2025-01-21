@@ -21,21 +21,26 @@ def main():
        print("\n--- Début du jeu ---")
        word_guess, letters =display_word()
        count=len(word_guess)
+       print(count)
        while count > 0:
         
 
         letter = input("Devinez une lettre : ").lower()
 
-        if letter in letters:
+        if letter in letters and "_" in word_guess :
             for i in range(len(word_guess)):
                 if letters[i] == letter:
                     word_guess[i] = letter
             print(f"Bonne réponse! La lettre '{letter}' est dans le mot.")
-            count -=1
+            print(word_guess)
             print(f"il vous reste,{count} tentative")
         else:
             count -= 1
             print(f"Incorrect! Il vous reste {count} tentatives.")
+        if "_" not in word_guess:
+             print(f"Félicitations Vous avez trouvé le mot '{word_guess}'!")
+             
+
 
  
 main()

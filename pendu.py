@@ -12,12 +12,12 @@ def main():
                 print("Le fichier est vide. Ajoutez des mots avant de jouer.")
                 return
     except FileNotFoundError:
-        print("Le fichier 'mots.txt' est introuvable. Veuillez le créer avant de jouer.")
+        print("Le fichier 'mots.txt' est introuvable. Créer le avant de jouer.")
         return
     
     word = rd.choice(words).lower()
     letters = list(word)
-    print("modele : ", letters)      # TEST
+    print("modele : ","".join(letters))      # TEST
     word_guess = ['_' for _ in letters]
     print("Mot à deviner : ", " ".join(word_guess))
 
@@ -42,7 +42,7 @@ def main():
             for i, char in enumerate(letters):
                 if letter == char:
                     word_guess[i] = letter
-            print("Bonne lettre !")
+            print("Bonne lettre !\n")
             print(" ".join(word_guess))
         else:
             print("\nCette lettre n'est pas dans le mot.")

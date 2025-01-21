@@ -1,17 +1,28 @@
 
-random_word = 
+random_word = "SOS"
 letters = list(random_word)
-print (letters)
 
-word_gess = ['_' for _ in letters]
-print(word_gess)
+word_guess = ['_' for _ in letters]
 
-letter = input("veuillez renseigner votre première lettre: ")
+count =len(letters)
 
-for i,  charactere in enumerate(letters):
-                if letter == charactere:
-                        word_gess[i] = letter
-                        
-                print(f"Index: {i}, Caractère: {charactère}")
-            
-print(game_list)
+while True:
+    print(word_guess)
+    letter = input("Veuillez entrer votre lettre : ")
+    for i, charactere in enumerate(letters):
+        if letter == charactere:
+            word_guess[i] = letter  
+            count = count -1
+            if count ==0:
+                print("Vous avez gagné")
+                break
+
+    
+
+
+
+         
+
+
+        
+                                    

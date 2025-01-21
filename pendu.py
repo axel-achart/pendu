@@ -34,7 +34,7 @@ def main():
 # Ajout d'un mot dans la liste
 def insert_word():
     new_word = str(input("\nEnter a new word : "))
-    file = open("mots.txt", "w")
+    file = open("mots.txt", "a")
     file.write(new_word)
     file.close()
     print("\nFile update")

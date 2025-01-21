@@ -1,44 +1,67 @@
 # Importer la bibliothèque
 import random as rd
 
-
+# Funtion main
 def main():
     print("\n--- Début du jeu ---")
-    with open("mots.txt", "r") as file:
-        words = file.read().splitlines()
-    word = rd.choice(words)
+
+    try:
+        with open("mots.txt", "r", encoding="utf-8") as file:
+            words = file.read().splitlines()
+            if not words:
+                print("Le fichier est vide. Ajoutez des mots avant de jouer.")
+                return
+    except FileNotFoundError:
+        print("Le fichier 'mots.txt' est introuvable. Veuillez le créer avant de jouer.")
+        return
+    
+    word = rd.choice(words).lower()
     letters = list(word)
     print("modele : ", letters)      # TEST
     word_guess = ['_' for _ in letters]
-    print(word_guess)
+    print("Mot à deviner : ", " ".join(word_guess))
 
-    count = len(letters)
-    print("Coups : ", count)
+    count = len(letters) + 2
+    print(f"Vous avez {count} coups pour deviner le mot.")
 
-    while True:
-        letter = input("Veuillez renseigner une lettre: ")
-        for i, charactere in enumerate(letters):
-            if letter == charactere:
-                word_guess[i] = letter
-                count -= 1
-                print("Coups restants : ", count)
-        if letter != charactere:                        # A REVOIR CAR CETTE CONDITION SE LANCE A CHAQUE FOIS
-            print("\nLettre non correct")
+    while count > 0:
+        letter = input("\nVeuillez renseigner une lettre: ").lower()
 
-        print("\n", word_guess)
-        print()
+        # Vérif si c'est une lettre
+        if len(letter) != 1 or not letter.isalpha():
+            print("Veuillez entrer une seule lettre valide.")
+            continue
         
+        # Vérif si c'est déjà donnée
+        if letter in word_guess:
+            print("Vous avez déjà trouvé cette lettre.")
+            continue
 
+        # Vérif si la lettre est une bonne réponse
+        if letter in letters:
+            for i, char in enumerate(letters):
+                if letter == char:
+                    word_guess[i] = letter
+            print("Bonne lettre !")
+            print(" ".join(word_guess))
+        else:
+            print("\nCette lettre n'est pas dans le mot.")
+            count -= 1
+            print(f"Il vous reste {count} coups pour deviner le mot.")
+        
+    else:
+        print("\nVous avez perdu. Le mot était :", word)
 
 
 # Ajout d'un mot dans la liste
 def insert_word():
-    new_word = str(input("\nEnter a new word : "))
-    file = open("mots.txt", "a")
-    file.write(new_word)
-    file.close()
-    print("\nFile update")
-    print()
+    new_word = input("\nEntrez un nouveau mot (en minuscules, sans espace) : ").strip().lower()
+    if new_word.isalpha():
+        with open("mots.txt", "a", encoding="utf-8") as file:
+            file.write(new_word + "\n")
+        print("Mot ajouté avec succès.")
+    else:
+        print("Veuillez entrer un mot valide.")
 
 
 # Fonction principale

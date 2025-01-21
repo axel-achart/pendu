@@ -1,21 +1,62 @@
-# Importing Libraries
-import pygame as pg
+# Importer la bibliothèque
+import random as rd
 
 
-# Function to play with words in 'mots.txt'
-def play_now():
-    with open('mots.txt', 'r') as file:
-        search = file.read()
-        print(search)
+# Initialisation de la liste de mots
+word_list = ['computer'
+, 'data'
+, 'intelligence'
+, 'science'
+, 'engineer'
+, 'os'
+, 'artificial'
+, 'keyboard'
+, 'mouse'
+, 'screen'
+, 'processor'
+, 'generative'
+, 'analytics'
+, 'machine'
+, 'learning']
 
 
-# Function to enter a word to play with it
-def enter_word_play():
-    print("No define yet")
-
-
-# Function Main
 def main():
+    print("\n--- Début du jeu ---")
+    random_word = rd.choice(word_list)
+    letters = list(random_word)
+    print("modele : ", letters)      # TEST
+    word_guess = ['_' for _ in letters]
+    print(word_guess)
+
+    count = len(letters)
+    print("Coups : ", count)
+
+    while True:
+        letter = input("Veuillez renseigner une lettre: ")
+        for i, charactere in enumerate(letters):
+            if letter == charactere:
+                word_guess[i] = letter
+                count -= 1
+                print("Coups restants : ", count)
+        if letter != charactere:                        # A REVOIR CAR CETTE CONDITION SE LANCE A CHAQUE FOIS
+            print("\nLetttre non correct")
+
+        print("\n", word_guess)
+        print()
+        
+
+
+
+# Ajout d'un mot dans la liste
+def insert_word():
+    new_word = str(input("\nEnter a new word : "))
+    word_list.append(new_word)
+    print("\nList update : ", word_list)
+    print()
+
+
+# Fonction principale
+def menu():
 
     running = True
 
@@ -31,10 +72,11 @@ def main():
         match menu_choice:
 
             case '1':
-                play_now()
+                main()
 
             case '2':
-                enter_word_play()
+                insert_word()
+                main()
 
             case '3':
                 print("\nLeaving Hanged game...")
@@ -44,13 +86,6 @@ def main():
     exit()      # When running is False
 
 
-# For PyGame
-def menu():
-    pg.init()       # Initialisation of PyGame
-    main()
 
-
-# Program execute condition
 if __name__ == '__main__':
-    print("\nLaunching Hanged game...")
     menu()

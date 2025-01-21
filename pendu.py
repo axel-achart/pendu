@@ -1,31 +1,46 @@
 # Importer la bibliothèque
 import random as rd
 
-# Funtion main
-def main():
-    print("\n--- Début du jeu ---")
-
-    # Essaie de lire le fichier, et retourne des erreurs si fichier vide ou inexistant
+# Fonction pour lire le fichier
+def load_words():
+# Essaie de lire le fichier, et retourne des erreurs si fichier vide ou inexistant
     try:
         with open("mots.txt", "r", encoding="utf-8") as file:
             words = file.read().splitlines()
             if not words:
                 print("Le fichier est vide. Ajoutez des mots avant de jouer.")
                 return
+            return words
     except FileNotFoundError:
         print("Le fichier 'mots.txt' est introuvable. Créer le avant de jouer.")
         return
-    
-    # Récupère aléatoirement un mot du fichier
-    word = rd.choice(words).lower()
-    letters = list(word)        # Sépare chaques lettres du mot
 
+# Fonction pour récup un mot aléatoire du fichier
+def load_word():
+    words = load_words()
+    # Récupère aléatoirement un mot du fichier
+    random_word = rd.choice(words).lower()
+    return random_word
+
+# Fonction pour print sous forme de secret le mot à deviner
+def display_word():
+    random_word = load_word()
+    letters = list(random_word)        # Sépare chaques lettres du mot
+    
     print("modele : ","".join(letters))      # TEST TEST TEST TEST TEST
 
     word_guess = ['_' for _ in letters]
     print("Mot à deviner : ", " ".join(word_guess))     # Affiche les '_' à deviner
+    return word_guess, letters
 
-    count = len(letters) + 3        # Nombre de chances
+# Funtion main
+def main():
+    print("\n--- Début du jeu ---")
+    load_words()        # Lecture du fichier
+    word_guess, letters = display_word()
+    random_word = load_word()
+    
+    count = len(letters) + 2        # Nombre de chances
     print(f"Vous avez {count} coups pour deviner le mot.")
 
     while count > 0:        # Tant que le joueur n'a pas utilisé tous ses coups
@@ -52,9 +67,15 @@ def main():
             print("\nCette lettre n'est pas dans le mot.")
             count -= 1
             print(f"Il vous reste {count} coups pour deviner le mot.")
+            print()
+            print(" ".join(word_guess))
+        
+        if "_" not in word_guess:
+             print("Félicitations ! Vous avez trouvé le mot", "".join(word_guess))
+             break
         
     else:
-        print("\nVous avez perdu. Le mot était :", word)
+        print("\nVous avez perdu. Le mot était :", random_word)
 
 
 # Ajout d'un mot dans la liste

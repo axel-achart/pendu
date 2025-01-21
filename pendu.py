@@ -2,28 +2,12 @@
 import random as rd
 
 
-# Initialisation de la liste de mots
-word_list = ['computer'
-, 'data'
-, 'intelligence'
-, 'science'
-, 'engineer'
-, 'os'
-, 'artificial'
-, 'keyboard'
-, 'mouse'
-, 'screen'
-, 'processor'
-, 'generative'
-, 'analytics'
-, 'machine'
-, 'learning']
-
-
 def main():
     print("\n--- Début du jeu ---")
-    random_word = rd.choice(word_list)
-    letters = list(random_word)
+    with open("mots.txt", "r") as file:
+        words = file.read().splitlines()
+    word = rd.choice(words)
+    letters = list(word)
     print("modele : ", letters)      # TEST
     word_guess = ['_' for _ in letters]
     print(word_guess)
@@ -39,7 +23,7 @@ def main():
                 count -= 1
                 print("Coups restants : ", count)
         if letter != charactere:                        # A REVOIR CAR CETTE CONDITION SE LANCE A CHAQUE FOIS
-            print("\nLetttre non correct")
+            print("\nLettre non correct")
 
         print("\n", word_guess)
         print()
@@ -50,8 +34,10 @@ def main():
 # Ajout d'un mot dans la liste
 def insert_word():
     new_word = str(input("\nEnter a new word : "))
-    word_list.append(new_word)
-    print("\nList update : ", word_list)
+    file = open("mots.txt", "w")
+    file.write(new_word)
+    file.close()
+    print("\nFile update")
     print()
 
 

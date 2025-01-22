@@ -1,98 +1,104 @@
-# Importer la bibliothèque
+# Import Libraries
 import random as rd
 
-# Fonction pour lire le fichier
+# Add a word in the file
+def insert_word():
+    while True:
+        try:
+            new_word = str(input("\nEnter a new word (without spaces and in lowercase) : ")).strip().lower()
+            if new_word.isalpha():      # Check if it is in 'a-z'
+                with open("mots.txt", "a", encoding="utf-8") as file:
+                    file.write(new_word + "\n")
+                print("Word added successfully.")
+                break
+            else:
+                print("Error, entry invalid please retry")
+        except ValueError:
+            print("Please enter only letters.")
+
+# Function to read the file
 def load_words():
-# Essaie de lire le fichier, et retourne des erreurs si fichier vide ou inexistant
+# Try to open, read and verify if the file exist and if it is not empty
     try:
         with open("mots.txt", "r", encoding="utf-8") as file:
             words = file.read().splitlines()
             if not words:
-                print("Le fichier est vide. Ajoutez des mots avant de jouer.")
+                print("File is empty. Add words before playing.")
                 return
             return words
     except FileNotFoundError:
-        print("Le fichier 'mots.txt' est introuvable. Créer le avant de jouer.")
+        print("File 'mots.txt' does not exist. Create it before playing.")
         return
 
-# Fonction pour récup un mot aléatoire du fichier
+# Function to load a random word from variable from file
 def load_word():
     words = load_words()
-    # Récupère aléatoirement un mot du fichier
+    # random.choice to pick a random value
     random_word = rd.choice(words).lower()
     return random_word
 
-# Fonction pour print sous forme de secret le mot à deviner
+# Function to show the secret word
 def display_word():
     random_word = load_word()
-    letters = list(random_word)        # Sépare chaques lettres du mot
+    letters = list(random_word)        # Separated each letters from the word
     
-    print("modele : ","".join(letters))      # TEST TEST TEST TEST TEST
+    print("modele test : ","".join(letters))      # TEST TEST TEST TEST TEST
 
     word_guess = ['_' for _ in letters]
-    print("Mot à deviner : ", " ".join(word_guess))     # Affiche les '_' à deviner
+    print("Guess : ", " ".join(word_guess))     # '_' of the word to guess
     return word_guess, letters
 
-# Funtion main
+# Funtion main for every check and win condition
 def main():
-    print("\n--- Début du jeu ---")
-    load_words()        # Lecture du fichier
+    print("\n--- START ---")
+    load_words()        # Reading file...
+
     word_guess, letters = display_word()
     random_word = load_word()
     
-    count = len(letters) + 2        # Nombre de chances
-    print(f"Vous avez {count} coups pour deviner le mot.")
+    count = len(letters) + 2        # Number of chances
+    print(f"You have {count} moves to guess the word.")
 
-    while count > 0:        # Tant que le joueur n'a pas utilisé tous ses coups
-        letter = input("\nVeuillez renseigner une lettre: ").lower()
+    while count > 0:        # While the user has chances
+        letter = input("\nEnter a letter : ").lower()
 
-        # Vérif si c'est bien une lettre
+        # Check if it is a good entry
         if len(letter) != 1 or not letter.isalpha():
-            print("Veuillez entrer une seule lettre valide.")
+            print("Please enter one letter only, and only letters.")
             continue
         
-        # Vérif si c'est déjà donnée
+        # Check if the letter is already find
         elif letter in word_guess:
-            print("Vous avez déjà trouvé cette lettre.")
+            print("You already find this letter.")
             continue
 
-        # Vérif si la lettre est une bonne réponse
+        # Check if it is correct or not
         elif letter in letters:
             for i, charactere in enumerate(letters):
                 if letter == charactere :
-                    word_guess[i] = letter      # Va remplacer le '_' par la lettre
-            print("Bonne lettre !\n")
+                    word_guess[i] = letter      # Replace '_' with the good letter
+            print("Good answer !\n")
             print(" ".join(word_guess))
-        else:
-            print("\nCette lettre n'est pas dans le mot.")
+        else:       # Not correct word
+            print("\nThis letter is not in the word.")
             count -= 1
-            print(f"Il vous reste {count} coups pour deviner le mot.")
+            print(f"You have {count} moves left to guess the word.")
             print()
             print(" ".join(word_guess))
         
+        # Check if the word is find == WIN
         if "_" not in word_guess:
-             print("Félicitations ! Vous avez trouvé le mot", "".join(word_guess))
+             print("Congratulations ! You find the word", "".join(word_guess))
              break
         
-    else:
-        print("\nVous avez perdu. Le mot était :", random_word)
+    else:       # If every chances are used
+        print("\nYou loose. The word was :", random_word)
 
 
-# Ajout d'un mot dans la liste
-def insert_word():
-    new_word = input("\nEntrez un nouveau mot (en minuscules, sans espace) : ").strip().lower()
-    if new_word.isalpha():      # Vérifie si c'est bien entre a-z
-        with open("mots.txt", "a", encoding="utf-8") as file:
-            file.write(new_word + "\n")
-        print("Mot ajouté avec succès.")
-    else:
-        print("Veuillez entrer un mot valide.")
-
-
-# Fonction principale
+# Function main to call functions and show Menu
 def menu():
 
-    running = True      # Initialisation pour que la boucle marche jusqu'à changement par Exit
+    running = True      # To keep the game open, or possibility to leave if 'False'
 
     while running:
         print("\n------ MENU ------")
@@ -114,12 +120,12 @@ def menu():
 
             case '3':
                 print("\nLeaving Hanged game...")
-                running = False
+                running = False     # Stop the loop
 
     print() 
     exit()      # When running is False
 
 
-
+# Program execute by ourself only
 if __name__ == '__main__':
     menu()

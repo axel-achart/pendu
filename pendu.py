@@ -2,7 +2,7 @@
 import random as rd
 
 # Function Difficulty
-def difficulty():
+def choose_difficulty():
     while True:
         try:
             level = int(input("Choose the difficulty (easy '1' / hard '2'): "))
@@ -75,7 +75,7 @@ def main():
     print("\n--- START ---")
     load_words()        # Reading file...
 
-    count = difficulty()    # Ask difficulty
+    count = choose_difficulty()    # Ask difficulty
 
     word_guess, letters = display_word()
     random_word = load_word()

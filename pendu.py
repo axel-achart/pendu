@@ -16,7 +16,7 @@ def choose_difficulty():
             print("\nInvalid entry, please choose between 1 and 2")
 
 
-# Add a word in the file
+# Insert a new word in the file
 def insert_word():
     while True:
         try:
@@ -32,9 +32,9 @@ def insert_word():
                         print("Word added successfully.")
                         break
             else:
-                print("Error, entry invalid please retry")
+                print("Please enter only letters.")
         except ValueError:
-            print("Please enter only letters.")
+            print("Error, entry invalid please retry")
 
 # Function to read the file
 def load_words():

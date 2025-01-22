@@ -75,8 +75,29 @@ def display_word():
     print("Guess : ", " ".join(word_guess))     # '_' of the word to guess
     return word_guess, letters
 
+# Function to set the score in the file score.txt
+def save_score(name, score):
+    with open("score.txt", "a") as file:
+        file.write(f"{name} : {score} pts\n")
+
+# Function to show the scoreboard
+def display_scores():
+    try:
+        with open("score.txt", "r") as file:
+            scores = file.read().splitlines()
+            if scores:
+                print("\nScoreboard :")
+                for score in scores:
+                    print(score)
+            else:
+                print("\nScoreboard empty.")
+    except FileNotFoundError:
+        print("File 'score.txt' does not exist. Create it before playing.") 
+
+
 # Funtion main for every check and win condition
 def main():
+    name = input("\nEnter your name : ")
     history = []        # List for letter already tap
     print("\n--- START ---")
     load_words()        # Reading file...
@@ -121,10 +142,15 @@ def main():
         # Check if the word is find == WIN
         if "_" not in word_guess:
              print("Congratulations ! You find the word", "".join(word_guess))
+             score=len(word_guess)*count        # Calculate the score
+             print(f"Your score is {score} pts")
+             save_score(name,score)     # Write in the file score.txt
              break
         
     else:       # If every chances are used
         print("\nYou loose. The word was :", random_word)
+        score = 0
+        print(score)
 
 
 # Function main to call functions and show Menu
@@ -136,7 +162,8 @@ def menu():
         print("\n------ MENU ------")
         print("1. Play now")
         print("2. Enter a word")
-        print("3. Exit")
+        print("3. Scoreboard")
+        print("4. Exit")
         print("------------------\n")
         menu_choice = input("Your choice : ")
 
@@ -146,6 +173,8 @@ def menu():
             case '2':
                 insert_word()
             case '3':
+                display_scores()
+            case '4':
                 print("\nLeaving Hanged game...")
                 running = False     # Stop the loop
 

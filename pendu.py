@@ -62,8 +62,6 @@ def load_word():
 def display_word():
     random_word = load_word()
     letters = list(random_word)        # Separated each letters from the word
-    
-    print("modele test : ","".join(letters))      # TEST TEST TEST TEST TEST
 
     word_guess = ['_' for _ in letters]
     print("Guess : ", " ".join(word_guess))     # '_' of the word to guess

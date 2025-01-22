@@ -1,16 +1,36 @@
 # Import Libraries
 import random as rd
 
+# Function Difficulty
+def difficulty():
+    while True:
+        try:
+            level = int(input("Choose the difficulty (easy '1' / hard '2'): "))
+            if level == 1:
+                count = 10      # Level Easy : 10 moves
+                return count
+            elif level == 2:
+                count = 5       # Level Hard : 5 moves
+                return count
+        except ValueError:
+            print("\nInvalid entry, please choose between 1 and 2")
+
+
 # Add a word in the file
 def insert_word():
     while True:
         try:
             new_word = str(input("\nEnter a new word (without spaces and in lowercase) : ")).strip().lower()
             if new_word.isalpha():      # Check if it is in 'a-z'
-                with open("mots.txt", "a", encoding="utf-8") as file:
-                    file.write(new_word + "\n")
-                print("Word added successfully.")
-                break
+                with open("mots.txt", "r", encoding="utf-8") as file:
+                    words = file.read().splitlines()
+                    if new_word in words:
+                        print("\nWord already exist.")
+                    else:
+                        with open("mots.txt", "a", encoding="utf-8") as file:
+                            file.write(new_word + "\n")
+                        print("Word added successfully.")
+                        break
             else:
                 print("Error, entry invalid please retry")
         except ValueError:
@@ -51,13 +71,15 @@ def display_word():
 
 # Funtion main for every check and win condition
 def main():
+    history = []        # List for letter already tap
     print("\n--- START ---")
     load_words()        # Reading file...
+
+    count = difficulty()    # Ask difficulty
 
     word_guess, letters = display_word()
     random_word = load_word()
     
-    count = len(letters) + 2        # Number of chances
     print(f"You have {count} moves to guess the word.")
 
     while count > 0:        # While the user has chances
@@ -86,6 +108,8 @@ def main():
             print(f"You have {count} moves left to guess the word.")
             print()
             print(" ".join(word_guess))
+            history.append(letter)      # No correct letter add in history list
+            print("History :", history)
         
         # Check if the word is find == WIN
         if "_" not in word_guess:
@@ -117,7 +141,6 @@ def menu():
 
             case '2':
                 insert_word()
-                main()
 
             case '3':
                 print("\nLeaving Hanged game...")

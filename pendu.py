@@ -19,16 +19,17 @@ def insert_word():
 # Function to read the file
 def load_words():
 # Try to open, read and verify if the file exist and if it is not empty
-    try:
-        with open("mots.txt", "r", encoding="utf-8") as file:
-            words = file.read().splitlines()
-            if not words:
-                print("File is empty. Add words before playing.")
-                return
-            return words
-    except FileNotFoundError:
-        print("File 'mots.txt' does not exist. Create it before playing.")
-        return
+    while True:
+        try:
+            with open("mots.txt", "r", encoding="utf-8") as file:
+                words = file.read().splitlines()
+                if not words:
+                    print("File is empty. Add words before playing.")
+                    return
+                return words
+        except FileNotFoundError:
+            print("File 'mots.txt' does not exist. Create it before playing.")
+            return
 
 # Function to load a random word from variable from file
 def load_word():

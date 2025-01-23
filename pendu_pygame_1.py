@@ -34,7 +34,7 @@ game_steps = [
 pygame.mixer.init()
 
 # sounds call
-loose_sound = pygame.mixer.Sound(r"C:\Users\Windows\Desktop\projets\1a\Pendu\pendu\sounds\loose.wav")
+loose_sound = pygame.mixer.Sound(r"Desktop\projets\1a\Pendu\pendu\sounds\loose.wav")
 
 # Function Difficulty
 def choose_difficulty():
@@ -102,28 +102,28 @@ def load_word():
 
 # PYGAME ADDING
 # Function to show the secret word
-def display_word():
+def display_word(word_guess,letters):
     random_word = load_word()
     letters = list(random_word)        # Separated each letters from the word
     word_guess = ['_' for _ in letters]
     word_display = " ".join(word_guess)
     text = ubuntu_font.render(word_display, True, black)
     screen.fill(white)
-    screen.blit(text, (200,200))
+    screen.blit(text, (3,500))
     pygame.display.flip()
-    return word_guess, letters
+
 
 # Funtion main for every check and win condition
 def main():
     name = input("\nEnter your name : ")
     history = []        # List for letter already tap
     print("\n--- START ---")
-    load_words()        # Reading file...
+    words = load_words()        # Reading file...
 
     count = choose_difficulty()    # Ask difficulty
-
-    word_guess, letters = display_word()
-    random_word = load_word()
+    ramdom_word = load_word()
+    letters = list(ramdom_word)
+    word_guess = ['_' for _ in letters]
     
     print(f"You have {count} moves to guess the word.")
 
@@ -169,10 +169,9 @@ def main():
             print("History :", history)
 
 #Adding PYGAME  
-        word_guess, letters = display_word() # screen update    
-        screen.fill(white) # erase screen
+        display_word(word_guess,letters) # screen update    
         if count < 10: 
-            if 0 <= (10 - count) < len(game_steps):
+            if count < 10 and 0 <= (10 - count) < len(game_steps):
               screen.blit(game_steps[10 - count], [180,60])
         pygame.display.flip()
 
@@ -211,7 +210,9 @@ def menu():
 
         match menu_choice:
             case '1':
-                main()
+              random_word = load_word()  
+              word_guess = ['_' for _ in random_word]  
+              main()  
             case '2':
                 insert_word()
             case '3':

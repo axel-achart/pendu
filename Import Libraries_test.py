@@ -4,10 +4,10 @@ import random as rd
 import pygame
 import os
 
-# Définir le chemin de base du projet
+# way to project main file
 BASE_DIR = r"C:/Users/Windows/Desktop/projets/1a/Pendu/pendu"
 
-# Construire les chemins vers les ressources
+# way to spécific files
 IMAGE_DIR = os.path.join(BASE_DIR, "images")
 SOUND_DIR = os.path.join(BASE_DIR, "sounds")
 
@@ -29,7 +29,7 @@ ubuntu_font = pygame.font.Font(os.path.join(BASE_DIR, "Ubuntu-Regular.ttf"), 36)
 
 # images list in order 0 -> 12
 game_steps = []
-for num in range(5, 12):
+for num in range(2, 13):
     try:
         game_steps.append(pygame.image.load(os.path.join(IMAGE_DIR, f"p{num}.png")))
     except pygame.error as e:
@@ -57,13 +57,15 @@ def choose_difficulty():
         try:
             level = int(input("Choose the difficulty (easy '1' / hard '2'): "))
             if level == 1:
-                count = 10      # Level Easy : 10 moves
-                return count
+                count = 10 # easy mode: 8 moves
+                start_image = 2
+                return count, start_image
             elif level == 2:
-                count = 5       # Level Hard : 5 moves
-                return count
+                count = 5  # hard mode: 5 moves
+                start_image = 3  
+                return count, start_image
         except ValueError:
-            print("\nInvalid entry, please choose between 1 and 2")
+            print("\nInvalid entry, please choose between 1 and 2.")
 
 # Insert a new word in the file
 def insert_word():
@@ -144,7 +146,7 @@ def main():
     print("\n--- START ---")
     words = load_words()  # Reading file...
 
-    count = choose_difficulty()  # Ask difficulty
+    count, start_image = choose_difficulty()  # Ask difficulty
     random_word = load_word()
     letters = list(random_word)
     word_guess = ['_' for _ in letters]
@@ -200,6 +202,8 @@ def main():
                 save_score(name, score)  # Write in the score file
                 return  # Exit the game loop after a win
         else:
+            if start_image == 1:  # Easy mode
+                screen.blit(game_steps[11], [180, 60])  # Display p12.png
             # Play the losing sound
             if loose_sound:
                 loose_sound.play()
@@ -209,33 +213,56 @@ def main():
 
 # Function main to call functions and show Menu
 def menu():
-    running = True      # To keep the game open, or possibility to leave if 'False'
+    menu_options = ["Play now", "Enter a word", "Scoreboard", "Exit"]
+    selected_index = 0
+    running = True
+    game_running = False  # Flag to control when the game is running
 
     while running:
-        print("\n------ MENU ------")
-        print("1. Play now")
-        print("2. Enter a word")
-        print("3. Scoreboard")
-        print("4. Exit")
-        print("------------------\n")
-        menu_choice = input("Your choice : ")
+        screen.fill(white)
+        display_title()
 
-        match menu_choice:
-            case '1':
-              random_word = load_word()  
-              word_guess = ['_' for _ in random_word]  
-              main()  
-            case '2':
-                insert_word()
-            case '3':
-                display_scores()
-            case '4':
-                print("\nLeaving Hangman game...")
-                running = False     # Stop the loop
+        # Display menu options
+        for i, option in enumerate(menu_options):
+            if i == selected_index:
+                text = ubuntu_font.render(option, True, black)
+            else:
+                text = ubuntu_font.render(option, True, (100, 100, 100))
+            text_rect = text.get_rect(center=(screen_résolution[0] // 2, 200 + 50 * i))
+            screen.blit(text, text_rect)
 
-    print() 
+        pygame.display.flip()
+
+        # Handle events
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+                pygame.quit()
+                return
+
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_UP:
+                    selected_index = (selected_index - 1) % len(menu_options)
+                elif event.key == pygame.K_DOWN:
+                    selected_index = (selected_index + 1) % len(menu_options)
+                elif event.key == pygame.K_RETURN:
+                    if menu_options[selected_index] == "Play now":
+                        game_running = True  # Start the game
+                    elif menu_options[selected_index] == "Enter a word":
+                        insert_word()
+                    elif menu_options[selected_index] == "Scoreboard":
+                        display_scores()
+                    elif menu_options[selected_index] == "Exit":
+                        running = False
+
+        if game_running:  # Game logic begins when this flag is True
+            random_word = load_word()
+            word_guess = ['_' for _ in random_word]
+            main()
+            game_running = False  # Reset the game flag after the game ends
+
     pygame.quit()
-    exit()      # When running is False
+    exit()
 
 
 # Program execute by itself only

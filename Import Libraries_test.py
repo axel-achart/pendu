@@ -1,5 +1,4 @@
 # Import Libraries
-
 import random as rd
 import pygame
 import os
@@ -11,14 +10,13 @@ BASE_DIR = r"C:/Users/Windows/Desktop/projets/1a/Pendu/pendu"
 IMAGE_DIR = os.path.join(BASE_DIR, "images")
 SOUND_DIR = os.path.join(BASE_DIR, "sounds")
 
-
 # PYGAME ADDING PART
 pygame.init()
 # main screen size
 screen_résolution = (800, 600)
 # screen object and name
 screen = pygame.display.set_mode(screen_résolution)
-pygame.display.set_caption("Hangman Game") 
+pygame.display.set_caption("Hangman Game")
 
 # colors used
 black = (0, 0, 0)
@@ -47,25 +45,85 @@ except pygame.error as e:
 
 # Title
 def display_title():
-    title_text = ubuntu_font.render("HANGMAN", True, black)  
-    
-    title_rect = title_text.get_rect(center=(screen_résolution[0] // 2, 30))  
+    title_text = ubuntu_font.render("HANGMAN", True, black)
+    title_rect = title_text.get_rect(center=(screen_résolution[0] // 2, 30))
     screen.blit(title_text, title_rect)
 
-def choose_difficulty():
+def get_player_name():
+    input_box = pygame.Rect(250, 200, 300, 50)  # Position de la zone de texte pour le nom
+    color_inactive = pygame.Color('lightskyblue3')
+    color_active = pygame.Color('dodgerblue2')
+    color = color_inactive
+    active = False
+    text = ''
+    font = pygame.font.Font(None, 36)
+    user_name = ''
+
     while True:
-        try:
-            level = int(input("Choose the difficulty (easy '1' / hard '2'): "))
-            if level == 1:
-                count = 10 # easy mode: 8 moves
-                start_image = 2
-                return count, start_image
-            elif level == 2:
-                count = 5  # hard mode: 5 moves
-                start_image = 3  
-                return count, start_image
-        except ValueError:
-            print("\nInvalid entry, please choose between 1 and 2.")
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if input_box.collidepoint(event.pos):
+                    active = True
+                else:
+                    active = False
+                color = color_active if active else color_inactive
+            if event.type == pygame.KEYDOWN:
+                if active:
+                    if event.key == pygame.K_RETURN:
+                        user_name = text
+                        return user_name
+                    elif event.key == pygame.K_BACKSPACE:
+                        text = text[:-1]
+                    else:
+                        text += event.unicode
+
+        screen.fill(white)
+        display_title()
+
+        txt_surface = font.render(text, True, black)
+        width = max(300, txt_surface.get_width() + 10)
+        input_box.w = width
+        screen.blit(txt_surface, (input_box.x + 5, input_box.y + 5))
+        pygame.draw.rect(screen, color, input_box, 2)
+
+        pygame.display.flip()
+        pygame.time.Clock().tick(30)
+
+def choose_difficulty():
+    font = pygame.font.Font(None, 36)
+    options = ["Easy", "Hard"]
+    selected = 0
+    running = True
+    while running:
+        screen.fill(white)
+        display_title()
+
+        for i, option in enumerate(options):
+            color = black if i == selected else (100, 100, 100)
+            text = font.render(option, True, color)
+            text_rect = text.get_rect(center=(screen_résolution[0] // 2, 300 + 50 * i))
+            screen.blit(text, text_rect)
+
+        pygame.display.flip()
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                exit()
+
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_UP:
+                    selected = (selected - 1) % len(options)
+                elif event.key == pygame.K_DOWN:
+                    selected = (selected + 1) % len(options)
+                elif event.key == pygame.K_RETURN:
+                    if selected == 0:
+                        return 10, 2  # Easy mode
+                    else:
+                        return 5, 3  # Hard mode
 
 # Insert a new word in the file
 def insert_word():
@@ -106,7 +164,7 @@ def load_word():
     words = load_words()
     # random.choice to pick a random value
     random_word = rd.choice(words).lower()
-    return random_word        
+    return random_word
 
 
 # PYGAME ADDING
@@ -114,7 +172,7 @@ def load_word():
 def display_word(word_guess):
     word_display = " ".join(word_guess)  # Joins the letters with spaces
     text = ubuntu_font.render(word_display, True, black)
-    screen.fill(white)  # Clear the screen 
+    screen.fill(white)  # Clear the screen
     display_title()
     screen.blit(text, (350, 500))  # Draw the word at the specified position
     pygame.display.flip()  # Update the display
@@ -136,22 +194,24 @@ def display_scores():
             else:
                 print("\nScoreboard empty.")
     except FileNotFoundError:
-        print("File 'score.txt' does not exist. Create it before playing.") 
+        print("File 'score.txt' does not exist. Create it before playing.")
 
 # Funtion main for every check and win condition
 # Main function for gameplay
 def main():
-    name = input("\nEnter your name : ")
+    name = get_player_name()  # Get the player's name from input box
+    count, start_image = choose_difficulty()  # Difficulty selection
+
+    print(f"Player: {name}")
+    print(f"You have {count} moves to guess the word.")
+
     history = []  # List for letters already tapped
     print("\n--- START ---")
     words = load_words()  # Reading file...
 
-    count, start_image = choose_difficulty()  # Ask difficulty
     random_word = load_word()
     letters = list(random_word)
     word_guess = ['_' for _ in letters]
-
-    print(f"You have {count} moves to guess the word.")
 
     running = True  # for Pygame
     while running:
@@ -207,9 +267,9 @@ def main():
             # Play the losing sound
             if loose_sound:
                 loose_sound.play()
-            pygame.time.wait(2000)
-            print(f"\nYou lost. The word was: {random_word}")
-            return  # Exit the game loop after a loss
+            print("\n--- GAME OVER ---")
+            print(f"You couldn't guess the word: {random_word}")
+            return
 
 # Function main to call functions and show Menu
 def menu():
@@ -265,8 +325,6 @@ def menu():
     exit()
 
 
-# Program execute by itself only
-if __name__ == '__main__':
-    menu()
+if __name__ == "__main__":
+    menu()  # Start the game
 
-pygame.quit()

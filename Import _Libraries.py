@@ -341,6 +341,8 @@ def display_scores():
         print("File 'score.txt' does not exist. Create it before playing.")
 
 # Function main for gameplay
+import pygame
+
 def main():
     name = get_player_name()  # Get the player's name from input box
     count, start_image, random_word, word_guess = choose_difficulty()  # Difficulty selection
@@ -406,24 +408,28 @@ def main():
                 score_message = ubuntu_font.render(f"Your score: {score} pts", True, (0, 128, 0))
                 screen.blit(win_message, (200, 500))
                 screen.blit(score_message, (200, 550))
+
+                # Display the "Return to Menu" button
+                back_button = pygame.Rect(350, 600, 150, 50)
+                pygame.draw.rect(screen, (200, 200, 200), back_button)
+                back_text = ubuntu_font.render("Return to Menu", True, black)
+                back_rect = back_text.get_rect(center=back_button.center)
+                screen.blit(back_text, back_rect)
+
                 pygame.display.flip()
-                
-                # Wait for the player to choose whether to return to the menu or quit
-                return_to_menu = False
-                while not return_to_menu:
+
+                # Wait for the player to click the "Return to Menu" button
+                menu_return = False
+                while not menu_return:
                     for event in pygame.event.get():
                         if event.type == pygame.QUIT:
                             pygame.quit()
                             exit()
-                        if event.type == pygame.KEYDOWN:
-                            if event.key == pygame.K_m:  # Press 'M' to return to menu
-                                return_to_menu = True
-                            elif event.key == pygame.K_q:  # Press 'Q' to quit the game
-                                pygame.quit()
-                                exit()
-                
-                # After waiting for the player's input, return to the menu
-                menu()
+                        if event.type == pygame.MOUSEBUTTONDOWN:
+                            if back_button.collidepoint(event.pos):
+                                menu_return = True
+
+                menu()  # Return to the menu
                 return
 
         else:
@@ -438,25 +444,30 @@ def main():
             # Show the game over message on screen
             game_over_message = ubuntu_font.render(f"Game Over! The word was: {random_word}", True, (255, 0, 0))
             screen.blit(game_over_message, (200, 500))
+
+            # Display the "Return to Menu" button
+            back_button = pygame.Rect(350, 600, 150, 50)
+            pygame.draw.rect(screen, (200, 200, 200), back_button)
+            back_text = ubuntu_font.render("Return to Menu", True, black)
+            back_rect = back_text.get_rect(center=back_button.center)
+            screen.blit(back_text, back_rect)
+
             pygame.display.flip()
-            
-            # Wait for the player to choose whether to return to the menu or quit
-            return_to_menu = False
-            while not return_to_menu:
+
+            # Wait for the player to click the "Return to Menu" button
+            menu_return = False
+            while not menu_return:
                 for event in pygame.event.get():
                     if event.type == pygame.QUIT:
                         pygame.quit()
                         exit()
-                    if event.type == pygame.KEYDOWN:
-                        if event.key == pygame.K_m:  # Press 'M' to return to menu
-                            return_to_menu = True
-                        elif event.key == pygame.K_q:  # Press 'Q' to quit the game
-                            pygame.quit()
-                            exit()
-            
-            # After waiting for the player's input, return to the menu
-            menu()
+                    if event.type == pygame.MOUSEBUTTONDOWN:
+                        if back_button.collidepoint(event.pos):
+                            menu_return = True
+
+            menu()  # Return to the menu
             return
+
 
 
 # Function main to call functions and show Menu

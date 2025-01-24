@@ -4,6 +4,14 @@ import random as rd
 import pygame
 import os
 
+# Définir le chemin de base du projet
+BASE_DIR = r"C:/Users/Windows/Desktop/projets/1a/Pendu/pendu"
+
+# Construire les chemins vers les ressources
+IMAGE_DIR = os.path.join(BASE_DIR, "images")
+SOUND_DIR = os.path.join(BASE_DIR, "sounds")
+
+
 # PYGAME ADDING PART
 pygame.init()
 # main screen size
@@ -17,20 +25,15 @@ black = (0, 0, 0)
 white = (255, 255, 255)
 
 # font used
-ubuntu_font = pygame.font.Font("desktop/Ubuntu-Regular.ttf", 36)
+ubuntu_font = pygame.font.Font(os.path.join(BASE_DIR, "Ubuntu-Regular.ttf"), 36)
 
-# images list in order 0 -> 13
-game_steps = [
-    pygame.image.load(r"C:\Users\Windows\Desktop\projets\1a\Pendu\pendu\images\p5.png"),
-    pygame.image.load(r"C:\Users\Windows\Desktop\projets\1a\Pendu\pendu\images\p6.png"),
-    pygame.image.load(r"C:\Users\Windows\Desktop\projets\1a\Pendu\pendu\images\p7.png"),
-    pygame.image.load(r"C:\Users\Windows\Desktop\projets\1a\Pendu\pendu\images\p8.png"),
-    pygame.image.load(r"C:\Users\Windows\Desktop\projets\1a\Pendu\pendu\images\p9.png"),
-    pygame.image.load(r"C:\Users\Windows\Desktop\projets\1a\Pendu\pendu\images\p10.png"),
-    pygame.image.load(r"C:\Users\Windows\Desktop\projets\1a\Pendu\pendu\images\p11.png"),
-    pygame.image.load(r"C:\Users\Windows\Desktop\projets\1a\Pendu\pendu\images\p12.png"),
-    pygame.image.load(r"C:\Users\Windows\Desktop\projets\1a\Pendu\pendu\images\p12.png")
-]
+# images list in order 0 -> 12
+game_steps = []
+for num in range(5, 12):
+    try:
+        game_steps.append(pygame.image.load(os.path.join(IMAGE_DIR, f"p{num}.png")))
+    except pygame.error as e:
+        print(f"Erreur lors du chargement de l'image p{num}.png : {e}")
 
 # mixer for sound
 pygame.mixer.init()

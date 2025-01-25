@@ -369,6 +369,12 @@ def main():
                 return
 
         if count > 0:  # While the user has chances
+            display_word(word_guess)  # Update the display with the current word guess
+            # Update the hangman image
+            if 0 <= (10 - count) < len(game_steps):
+                screen.blit(game_steps[10 - count], [180, 60])
+            pygame.display.flip()
+
             letter = input("\nEnter a letter : ").lower()
 
             # Check if it is a good entry
@@ -394,9 +400,7 @@ def main():
                 print(f"You have {count} moves left to guess the word.")
                 history.append(letter)  # Incorrect letter added to history
 
-            display_word(word_guess)  # Update the display with the current word guess
-
-            # Update the hangman image
+            ######
             if 0 <= (10 - count) < len(game_steps):
                 screen.blit(game_steps[10 - count], [180, 60])
             pygame.display.flip()
@@ -455,12 +459,15 @@ def main():
             game_over_message = ubuntu_font.render(f"Game Over! The word was: {random_word}", True, (255, 0, 0))
             screen.blit(game_over_message, (200, 500))
 
-            # Display the "Return to Menu" button
+             # Display the "Return to Menu" button
             back_button = pygame.Rect(30, 40, 150, 50)
+            pygame.draw.rect(screen, (200, 200, 200), back_button)
             reduced_font = pygame.font.Font(None, 30)
             back_text = reduced_font.render("Return to Menu", True, black)
-            back_rect = back_text.get_rect(center=(80, 60))
+            back_rect = back_text.get_rect(center=back_button.center)
             screen.blit(back_text, back_rect)
+            pygame.display.flip()
+
             pygame.display.flip()
 
             # Wait for the player to click the "Return to Menu" button

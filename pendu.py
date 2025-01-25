@@ -353,7 +353,6 @@ def main():
     count, start_image, random_word, word_guess = choose_difficulty()  # Difficulty selection
 
     history = []  # List for letters already tapped
-    words = load_words()  # Reading file...
 
     random_word = load_word()
     letters = list(random_word)
@@ -421,11 +420,10 @@ def main():
                 screen.blit(win_message, (200, 500))
                 screen.blit(score_message, (200, 550))
 
-                 # Display the "Return to Menu" button
+                # Display the "Return to Menu" button
                 back_button = pygame.Rect(30, 40, 150, 50)
-                pygame.draw.rect(screen, (200, 200, 200), back_button)
                 reduced_font = pygame.font.Font(None, 30)
-                back_text = reduced_font.render("Return to Menu", True, black)
+                back_text = reduced_font.render("Menu", True, black)
                 back_rect = back_text.get_rect(center=back_button.center)
                 screen.blit(back_text, back_rect)
                 pygame.display.flip()
@@ -461,9 +459,8 @@ def main():
 
              # Display the "Return to Menu" button
             back_button = pygame.Rect(30, 40, 150, 50)
-            pygame.draw.rect(screen, (200, 200, 200), back_button)
             reduced_font = pygame.font.Font(None, 30)
-            back_text = reduced_font.render("Return to Menu", True, black)
+            back_text = reduced_font.render("Menu", True, black)
             back_rect = back_text.get_rect(center=back_button.center)
             screen.blit(back_text, back_rect)
             pygame.display.flip()

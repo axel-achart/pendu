@@ -4,7 +4,7 @@ import pygame
 import os
 
 # way to project main file
-BASE_DIR = r"C:/Users/axela/Desktop/Bachelor IT LaPlateforme/Projets Ecole/AI/Projet 3 - Pendu (ft. Khady, Paul-E)/pendu"
+BASE_DIR = r"C:/Users/axela/Desktop/LaPlateforme/Projets Ecole/AI/Projet 3 - Pendu (ft. Khady, Paul-E)/pendu"
 
 # way to spécific files
 IMAGE_DIR = os.path.join(BASE_DIR, "images")
@@ -38,10 +38,15 @@ pygame.mixer.init()
 
 # sounds call
 try:
-    loose_sound = pygame.mixer.Sound(r"C:/Users/axela/Desktop/Bachelor IT LaPlateforme/Projets Ecole/AI/Projet 3 - Pendu (ft. Khady, Paul-E)/pendu/sounds/loose.wav")
+    loose_sound = loose_sound = pygame.mixer.Sound(r"C:/Users/axela/Desktop/LaPlateforme/Projets Ecole/AI/Projet 3 - Pendu (ft. Khady, Paul-E)/pendu/sounds/loose.wav")
 except pygame.error as e:
     print(f"Error loading sound: {e}")
     loose_sound = None
+try:
+    win_sound = win_sound = pygame.mixer.Sound(r"C:/Users/axela/Desktop/LaPlateforme/Projets Ecole/AI/Projet 3 - Pendu (ft. Khady, Paul-E)/pendu/sounds/win_1.wav")
+except pygame.error as e:
+    print(f"Error loading sound: {e}")
+    win_sound = None
 
 # Title
 def display_title():
@@ -268,7 +273,7 @@ def show_scoreboard_interface():
 
         # Afficher le titre du scoreboard
         title_text = font.render("Scoreboard", True, black)
-        title_rect = title_text.get_rect(center=(screen_résolution[0] // 2, 50))
+        title_rect = title_text.get_rect(center=(screen_résolution[0] // 2, 75))
         screen.blit(title_text, title_rect)
 
         # Afficher les scores
@@ -341,6 +346,8 @@ def display_scores():
         print("File 'score.txt' does not exist. Create it before playing.")
 
 # Function main for gameplay
+import pygame
+
 def main():
     name = get_player_name()  # Get the player's name from input box
     count, start_image, random_word, word_guess = choose_difficulty()  # Difficulty selection
@@ -400,7 +407,41 @@ def main():
                 score = len(word_guess) * count  # Calculate the score
                 print(f"Your score is {score} pts")
                 save_score(name, score)  # Write in the score file
-                return  # Exit the game loop after a win
+
+                if win_sound:
+                    win_sound.play()
+                
+                # Show the win message on screen
+                win_message = ubuntu_font.render(f"Congratulations! You found the word: {random_word}", True, (0, 128, 0))
+                score_message = ubuntu_font.render(f"Your score: {score} pts", True, (0, 128, 0))
+                screen.blit(win_message, (200, 500))
+                screen.blit(score_message, (200, 550))
+
+                 # Display the "Return to Menu" button
+                back_button = pygame.Rect(30, 40, 150, 50)
+                pygame.draw.rect(screen, (200, 200, 200), back_button)
+                reduced_font = pygame.font.Font(None, 30)
+                back_text = reduced_font.render("Return to Menu", True, black)
+                back_rect = back_text.get_rect(center=back_button.center)
+                screen.blit(back_text, back_rect)
+                pygame.display.flip()
+
+                pygame.display.flip()
+
+                # Wait for the player to click the "Return to Menu" button
+                menu_return = False
+                while not menu_return:
+                    for event in pygame.event.get():
+                        if event.type == pygame.QUIT:
+                            pygame.quit()
+                            exit()
+                        if event.type == pygame.MOUSEBUTTONDOWN:
+                            if back_button.collidepoint(event.pos):
+                                menu_return = True
+
+                menu()  # Return to the menu
+                return
+
         else:
             if start_image == 1:  # Easy mode
                 screen.blit(game_steps[11], [180, 60])  # Display p12.png
@@ -409,7 +450,34 @@ def main():
                 loose_sound.play()
             print("\n--- GAME OVER ---")
             print(f"You couldn't guess the word: {random_word}")
+            
+            # Show the game over message on screen
+            game_over_message = ubuntu_font.render(f"Game Over! The word was: {random_word}", True, (255, 0, 0))
+            screen.blit(game_over_message, (200, 500))
+
+            # Display the "Return to Menu" button
+            back_button = pygame.Rect(30, 40, 150, 50)
+            reduced_font = pygame.font.Font(None, 30)
+            back_text = reduced_font.render("Return to Menu", True, black)
+            back_rect = back_text.get_rect(center=(80, 60))
+            screen.blit(back_text, back_rect)
+            pygame.display.flip()
+
+            # Wait for the player to click the "Return to Menu" button
+            menu_return = False
+            while not menu_return:
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        pygame.quit()
+                        exit()
+                    if event.type == pygame.MOUSEBUTTONDOWN:
+                        if back_button.collidepoint(event.pos):
+                            menu_return = True
+
+            menu()  # Return to the menu
             return
+
+
 
 # Function main to call functions and show Menu
 def menu():

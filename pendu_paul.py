@@ -446,12 +446,11 @@ def main():
             screen.blit(game_over_message, (200, 500))
 
             # Display the "Return to Menu" button
-            back_button = pygame.Rect(350, 600, 150, 50)
-            pygame.draw.rect(screen, (200, 200, 200), back_button)
-            back_text = ubuntu_font.render("Return to Menu", True, black)
-            back_rect = back_text.get_rect(center=back_button.center)
+            back_button = pygame.Rect(30, 40, 150, 50)
+            reduced_font = pygame.font.Font(None, 30)
+            back_text = reduced_font.render("Return to Menu", True, black)
+            back_rect = back_text.get_rect(center=(80, 60))
             screen.blit(back_text, back_rect)
-
             pygame.display.flip()
 
             # Wait for the player to click the "Return to Menu" button

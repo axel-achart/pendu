@@ -347,13 +347,14 @@ def display_scores():
         print("File 'score.txt' does not exist. Create it before playing.")
 
 def get_letter_input():
-    input_box = pygame.Rect(5, 5, 50, 50)  # Position de la zone de texte pour entrer une lettre
+    input_box = pygame.Rect(50, 90, 50, 50)  # Position de la zone de texte pour entrer une lettre
     color_inactive = pygame.Color('lightskyblue3')
     color_active = pygame.Color('dodgerblue2')
     color = color_inactive
     active = False
     text = ''
     font = pygame.font.Font(None, 36)
+    border_width = 3  # Largeur de la bordure
 
     while True:
         for event in pygame.event.get():
@@ -379,8 +380,14 @@ def get_letter_input():
         # Affichage de la zone de saisie sans effacer le reste du jeu
         txt_surface = font.render(text, True, black)
         input_box.w = max(50, txt_surface.get_width() + 10)
-        screen.blit(txt_surface, (input_box.x + 5, input_box.y + 5))
-        pygame.draw.rect(screen, color, input_box, 2)
+        
+        # Centrer le texte horizontalement et décaler de 3px vers le bas
+        text_x = input_box.x + (input_box.width - txt_surface.get_width()) // 2
+        text_y = input_box.y + 5 + 3  # Déplacement vers le bas de 3px
+        screen.blit(txt_surface, (text_x, text_y))
+
+        # Dessiner la bordure avec des coins arrondis et une bordure de 3px
+        pygame.draw.rect(screen, black, input_box, border_width, border_radius=12)  # Bordure noire de 3px et coins arrondis
         
         pygame.display.flip()
         pygame.time.Clock().tick(30)  # Limiter le taux de rafraîchissement à 30 FPS

@@ -50,11 +50,11 @@ except pygame.error as e:
 
 
 # Title
+# Function to display title
 def display_title():
     title_text = ubuntu_font.render("HANGMAN", True, black)
     title_rect = title_text.get_rect(center=(screen_résolution[0] // 2, 30))
     screen.blit(title_text, title_rect)
-
 
 # ask name for scoreboard
 def get_player_name():
@@ -64,7 +64,6 @@ def get_player_name():
     color = color_inactive
     active = False
     text = ''
-    font = pygame.font.Font(None, 36)
     user_name = ''
 
     while True:
@@ -92,10 +91,10 @@ def get_player_name():
         display_title()
 
         # 'enter your name' on box insert name
-        prompt_text = font.render("Enter your name:", True, black)
+        prompt_text = ubuntu_font.render("Enter your name:", True, black)
         screen.blit(prompt_text, (250, 150))
 
-        txt_surface = font.render(text, True, black)
+        txt_surface = ubuntu_font.render(text, True, black)
         width = max(300, txt_surface.get_width() + 10)
         input_box.w = width
         screen.blit(txt_surface, (input_box.x + 5, input_box.y + 5))
@@ -103,7 +102,6 @@ def get_player_name():
 
         pygame.display.flip()
         pygame.time.Clock().tick(30)
-
 
 # insert a new word
 def insert_word_interface():
@@ -113,10 +111,9 @@ def insert_word_interface():
     color = color_inactive
     active = False
     text = ''
-    font = pygame.font.Font(None, 36)
     success_message = ''
     error_message = ''
-    word_saved = False  
+    word_saved = False
 
     while True:
         for event in pygame.event.get():
@@ -132,7 +129,7 @@ def insert_word_interface():
             if event.type == pygame.KEYDOWN:
                 if active:
                     if event.key == pygame.K_RETURN:
-                        if text.isalpha(): 
+                        if text.isalpha():
                             try:
                                 with open("mots.txt", "r", encoding="utf-8") as file:
                                     words = file.read().splitlines()
@@ -142,7 +139,7 @@ def insert_word_interface():
                                     with open("mots.txt", "a", encoding="utf-8") as file:
                                         file.write(text + "\n")
                                     success_message = "Word added successfully!"
-                                    text = '' 
+                                    text = ''
                                     error_message = ''
                                     word_saved = True
                             except FileNotFoundError:
@@ -154,35 +151,35 @@ def insert_word_interface():
                     else:
                         text += event.unicode
 
-        # if word is save
+        # if word is saved
         if word_saved:
             screen.fill(white)
             display_title()
 
-            instruction_text = font.render("Enter a word:", True, black)
+            instruction_text = ubuntu_font.render("Enter a word:", True, black)
             instruction_rect = instruction_text.get_rect(center=(screen_résolution[0] // 2, 150))
             screen.blit(instruction_text, instruction_rect)
 
-            success_text = font.render(success_message, True, (0, 128, 0))  # Vert pour le succès
+            success_text = ubuntu_font.render(success_message, True, (0, 128, 0))  # Green for success
             screen.blit(success_text, (250, 300))
 
-            pygame.display.flip()  # update display
-            pygame.time.wait(1500)  # 1.5sec before come back menu
+            pygame.display.flip()  # Update display
+            pygame.time.wait(1500)  # 1.5 sec before coming back to the menu
             return
 
         screen.fill(white)
         display_title()
 
-        instruction_text = font.render("Enter a word:", True, black)
+        instruction_text = ubuntu_font.render("Enter a word:", True, black)
         instruction_rect = instruction_text.get_rect(center=(screen_résolution[0] // 2, 150))
         screen.blit(instruction_text, instruction_rect)
 
-        # error message
+        # Error message
         if error_message:
-            error_text = font.render(error_message, True, (255, 0, 0)) 
+            error_text = ubuntu_font.render(error_message, True, (255, 0, 0))  # Red for error
             screen.blit(error_text, (250, 350))
 
-        txt_surface = font.render(text, True, black)
+        txt_surface = ubuntu_font.render(text, True, black)
         input_box.w = max(300, txt_surface.get_width() + 10)
         screen.blit(txt_surface, (input_box.x + 5, input_box.y + 5))
         pygame.draw.rect(screen, color, input_box, 2)
@@ -190,10 +187,8 @@ def insert_word_interface():
         pygame.display.flip()
         pygame.time.Clock().tick(30)
 
-
 # choose difficulty for 1 party
 def choose_difficulty():
-    font = pygame.font.Font(None, 36)
     options = ["Easy", "Hard"]
     selected = 0
     running = True
@@ -205,7 +200,7 @@ def choose_difficulty():
         # Show option easy/hard
         for i, option in enumerate(options):
             color = black if i == selected else (100, 100, 100)
-            text = font.render(option, True, color)
+            text = ubuntu_font.render(option, True, color)
             text_rect = text.get_rect(center=(screen_résolution[0] // 2, 300 + 50 * i))
             screen.blit(text, text_rect)
 
@@ -239,11 +234,12 @@ def choose_difficulty():
                     display_word(word_guess)
                     pygame.display.flip()
                     return count, start_image, random_word, word_guess
+
                 
 
 # menu scoreboard
 def show_scoreboard_interface():
-    font = pygame.font.Font(None, 36)
+    font = pygame.font.Font(os.path.join(BASE_DIR, "Ubuntu-Regular.ttf"), 16)  
     back_button = pygame.Rect(20, 20, 100, 50)
 
     while True:
@@ -266,11 +262,22 @@ def show_scoreboard_interface():
         title_rect = title_text.get_rect(center=(screen_résolution[0] // 2, 75))
         screen.blit(title_text, title_rect)
 
+        # Organize the scores into columns of 13
+        scores_per_column = 13
+        columns = [scores[i:i + scores_per_column] for i in range(0, len(scores), scores_per_column)]
+
+        # Set the initial x_offset for the first column
+        x_offset = 100
         y_offset = 100
-        for idx, score in enumerate(scores):
-            score_text = font.render(f"{idx + 1}. {score.strip()}", True, black)
-            screen.blit(score_text, (100, y_offset))
-            y_offset += 40  # space between scores
+
+        # Display scores in columns
+        for col_idx, column in enumerate(columns):
+            for idx, score in enumerate(column):
+                score_text = font.render(f"{idx + 1 + col_idx * scores_per_column}. {score.strip()}", True, black)
+                screen.blit(score_text, (x_offset, y_offset))
+                y_offset += 40  
+            # Move to the next column
+            x_offset += 200  # Reset y_offset for the next column
 
         # 'back' button
         pygame.draw.rect(screen, (200, 200, 200), back_button)
@@ -280,7 +287,6 @@ def show_scoreboard_interface():
 
         pygame.display.flip()
         pygame.time.Clock().tick(30)
-
 
 # Function to read the file words
 def load_words():
@@ -344,7 +350,7 @@ def get_letter_input():
     color = color_inactive
     active = False
     text = ''
-    font = pygame.font.Font(None, 36)
+    font = pygame.font.Font(os.path.join(BASE_DIR, "Ubuntu-Regular.ttf"), 36)  # Ubuntu-Regular font
     border_width = 3 
 
     while True:
@@ -368,7 +374,7 @@ def get_letter_input():
                         if len(text) < 1: 
                             text += event.unicode  
 
-        # input zone dispay
+        # input zone display
         txt_surface = font.render(text, True, black)
         input_box.w = max(50, txt_surface.get_width() + 10)
         
@@ -383,54 +389,55 @@ def get_letter_input():
         pygame.display.flip()
         pygame.time.Clock().tick(30)  # FPS 30
 
-
 # History words
 def display_history(history):
-    history_text = "Used letters: " + ", ".join(history) 
-    font = pygame.font.Font(None, 34)
+    history_text = "Used letters: " + ", ".join(history)  
+    font = pygame.font.Font(os.path.join(BASE_DIR, "Ubuntu-Regular.ttf"), 30)  
     
-    # surface history with text
-    history_surface = font.render(history_text, True, black)
+    # Create surface for history text
+    history_surface = font.render(history_text, True, black)  
     
-    # box
-    history_rect = pygame.Rect(640, 55, 150, 450) 
-    pygame.draw.rect(screen, blue, history_rect) 
-    border_radius = 10 
-    border_rect = history_rect.inflate(2, 2) 
-    pygame.draw.rect(screen, black, border_rect, 1, border_radius) 
+    # Box
+    history_rect = pygame.Rect(640, 55, 150, 450)  
+    pygame.draw.rect(screen, blue, history_rect)  
+    border_radius = 10  
+    border_rect = history_rect.inflate(2, 2)  
+    pygame.draw.rect(screen, black, border_rect, 1, border_radius)  
     
-    # title "Wrong Letters"
-    title_font = pygame.font.Font(None, 30) 
-    title_surface = title_font.render("Wrong letters:", True, black)
+    # Title 
+    title_font = pygame.font.Font(os.path.join(BASE_DIR, "Ubuntu-Regular.ttf"), 20)  
+    title_surface = title_font.render("Wrong letters:", True, black)  
     screen.blit(title_surface, (history_rect.x + 5, history_rect.y + 5))  
     
-    # spaces
-    available_height = history_rect.height - 40 
-    max_letters_height = available_height // 35 
+    # Spaces
+    available_height = history_rect.height - 40  
+    max_letters_height = available_height // 35  
     
-    # letters history used
-    history_lines = []
-    current_line = []
+    # Letters history used
+    history_lines = []  
+    current_line = []  
     for letter in history:
-        if len(", ".join(current_line + [letter])) < 3:
-            current_line.append(letter)
-        else:
-            history_lines.append(", ".join(current_line))
-            current_line = [letter]
-    
-    if current_line:
+        if len(", ".join(current_line + [letter])) < 3:  
+            current_line.append(letter)  
+        else:  
+            history_lines.append(", ".join(current_line))  
+            current_line = [letter]  
+
+    if current_line:  # Add the last line if it exists
         history_lines.append(", ".join(current_line))
     
-    y_offset = history_rect.y + 40 
-    for line in history_lines[:max_letters_height]:
-        letter_surface = font.render(line, True, black)
-        screen.blit(letter_surface, (history_rect.x + 5, y_offset))
-        y_offset += 35 
+    # Display
+    text_height = len(history_lines) * 35  
+    y_offset = history_rect.y + 40  
+    for line in history_lines[:max_letters_height]:  
+        letter_surface = font.render(line, True, black)  
+        screen.blit(letter_surface, (history_rect.x + (history_rect.width - letter_surface.get_width()) // 2, y_offset))  # Center horizontally
+        y_offset += 35  
     
-    pygame.display.flip()
+    pygame.display.flip()  # Update the display
 
 
-
+# Main game loop
 def main():
     name = get_player_name()  # Get the player's name from input box
     count, start_image, random_word, word_guess = choose_difficulty()  # Difficulty selection
@@ -566,13 +573,12 @@ def main():
                 return
 
 
-# Function main to call functions and show Menu
+# Main menu function
 def menu():
     menu_options = ["Play now", "Enter a word", "Scoreboard", "Exit"]
     selected_index = 0
     running = True
-    game_running = False  # Flag to control when the game is running
-
+    game_running = False  
     while running:
         screen.fill(white)
         display_title()
@@ -588,7 +594,7 @@ def menu():
 
         pygame.display.flip()
 
-        # Handle events
+        # handle events
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
@@ -610,11 +616,11 @@ def menu():
                     elif menu_options[selected_index] == "Exit":
                         running = False
 
-        if game_running:  # Game logic begins when this flag is True
+        if game_running:  # Game logic begins if true
             random_word = load_word()
             word_guess = ['_' for _ in random_word]
             main()
-            game_running = False  # Reset the game flag after the game ends
+            game_running = False  #  game ends
 
     pygame.quit()
     exit()

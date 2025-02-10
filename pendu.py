@@ -3,7 +3,7 @@ import pygame
 import os
 
 # way to project main file
-BASE_DIR = r"C:/Users/axela/Desktop/LaPlateforme/Projets Ecole/AI/Projet 3 - Pendu (ft. Khady, Paul-E)/pendu"
+BASE_DIR = r"C:/Users/axela/Desktop/LaPlateforme/Projets Ecole/AI/Projet 3 - Pendu/pendu"
 
 # way to spécific files
 IMAGE_DIR = os.path.join(BASE_DIR, "images")
@@ -38,12 +38,12 @@ pygame.mixer.init()
 
 # sounds call
 try:
-    loose_sound = loose_sound = pygame.mixer.Sound(r"C:/Users/axela/Desktop/LaPlateforme/Projets Ecole/AI/Projet 3 - Pendu (ft. Khady, Paul-E)/pendu/sounds/loose.wav")
+    loose_sound = loose_sound = pygame.mixer.Sound(r"C:/Users/axela/Desktop/LaPlateforme/Projets Ecole/AI/Projet 3 - Pendu/pendu/assets/sounds/loose.wav")
 except pygame.error as e:
     print(f"Error loading sound: {e}")
     loose_sound = None
 try:
-    win_sound = pygame.mixer.Sound(r"C:/Users/axela/Desktop/LaPlateforme/Projets Ecole/AI/Projet 3 - Pendu (ft. Khady, Paul-E)/pendu/sounds/win_1.wav")
+    win_sound = pygame.mixer.Sound(r"C:/Users/axela/Desktop/LaPlateforme/Projets Ecole/AI/Projet 3 - Pendu/pendu/assets/sounds/win_1.wav")
 except pygame.error as e:
     print(f"Error loading sound: {e}")
     loose_sound = None

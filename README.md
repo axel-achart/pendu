@@ -1,22 +1,37 @@
 # 🎮 Pendu Game
 
-**Pendu** is a **word-guessing game** developed using **Python** and **Pygame**. In this game, the player has to guess the hidden word by suggesting letters within a limited number of attempts. The game follows the classic rules of Hangman, where each incorrect guess results in part of a stick figure being drawn. The game also tracks player scores and saves them in a score file.
+**Pendu** is a classic **word-guessing game** developed using **Python** and **Pygame**.  
+Players try to discover a hidden word by guessing letters within a limited number of attempts. For each wrong guess, a part of the hangman figure is drawn, staying true to the traditional Hangman rules. The game tracks player scores and maintains a leaderboard saved in a score file.
 
-## 📂 Repository Contents
+---
 
-The repository contains the following files:
+## 🧩 Project Overview
 
-- **`pendu.py`** – The main Python script that contains the game logic, graphical interface, and handles user input through Pygame.
-- **`mots.txt`** – A text file containing a list of possible words for the player to guess. The game randomly selects one of these words as the secret word.
-- **`score.txt`** – A text file that stores the scores of players. The file keeps track of the best scores.
-- **`README.md`** – Project documentation.
-- **`.gitignore`** – Specifies files and directories to be ignored by Git.
-- **`assets/`** – A folder containing images used for the game (e.g., the hangman figure and background).
+This interactive game features a graphical interface for smooth gameplay and input handling.  
+The wordlist ensures varied game sessions by randomly selecting secret words, while persistent score tracking encourages competition and replayability.
 
-## 🛠️ Technologies Used
+---
 
-- **Python** – The primary programming language used for this game.
-- **Pygame** – A library used to handle the game window, user input, and graphical rendering.
-- **Text Files**:
-  - **`mots.txt`** – Stores the list of possible words for the game.
-  - **`score.txt`** – Stores the scores of the players (can be updated each time the game ends).
+## 📂 Repository Structure
+
+- **`pendu.py`** — Main script encompassing game mechanics, graphical interface, and player input via Pygame.  
+- **`mots.txt`** — A text file containing a curated list of words for the player to guess.  
+- **`score.txt`** — Stores player scores and records the best performances.  
+- **`README.md`** — Documentation for the project.  
+- **`.gitignore`** — Defines files and folders excluded from Git version control.  
+- **`assets/`** — Contains visual assets such as hangman images and background illustrations.
+
+---
+
+## 🛠️ Technologies & Skills
+
+- **Language:** Python 🐍  
+- **Libraries:** Pygame for real-time graphical rendering and input management  
+- **Data Storage:** Text files for word selection and persistent score tracking  
+- **Key Concepts:**  
+  - Event-driven programming  
+  - File I/O for score and word management  
+  - GUI development with Pygame  
+  - Game logic implementation reflecting traditional hangman rules
+
+---
